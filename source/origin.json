@@ -3,7 +3,21 @@
   "name": "mr-frog",
   "title": "[PILL PACK] Mr Frog",
   "author": "Blastnit",
-  "status": "pending_download",
-  "steamcmd_download_completed": false,
-  "reason": "SteamCMD bootstrap failed: execution sandbox network disabled; no original GMA installed."
+  "status": "extracted_verified",
+  "acquisition": "steamcmd",
+  "steamcmd_download_completed": true,
+  "source_workshop_url": "https://steamcommunity.com/sharedfiles/filedetails/?id=3615489241",
+  "source_archive_sha256": "79ffe498ceaaff08dd2ede68d7259afac5361807e40cb4f40e3079c7518ff73b",
+  "gma_header": {
+    "title": "Mr Frog [PILL PACK]",
+    "description": "{\"title\":\"Mr Frog [PILL PACK]\",\"type\":\"npc\",\"tags\":[\"cartoon\",\"fun\",\"roleplay\"],\"ignore\":[]}",
+    "author": "Author Name",
+    "steam_id": "0",
+    "timestamp": 1764523331
+  },
+  "files": 25,
+  "payload_bytes": 9619711,
+  "roundtrip_verified": true,
+  "official_gmad_verified": true,
+  "packaging_exclusions": []
 }

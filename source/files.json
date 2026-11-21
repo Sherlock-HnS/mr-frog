@@ -1,0 +1,152 @@
+[
+  {
+    "path": "lua/autorun/include/mr_frog_pill.lua",
+    "size": 6582,
+    "crc": 3341135651,
+    "sha256": "a57accaae8d339f5f7427e97ea8d4536ae47ac2b698e1d6605053d4a753efcef"
+  },
+  {
+    "path": "lua/autorun/mr_frog.lua",
+    "size": 687,
+    "crc": 196577694,
+    "sha256": "fef43417f3fc8ba35c7d1b1d0dcf116ff16a7c38be0168b7b8aeb4bfa938b94e"
+  },
+  {
+    "path": "lua/entities/frog_tree/cl_init.lua",
+    "size": 304,
+    "crc": 1722710135,
+    "sha256": "108211b8e7616e10c94556d003e5dbe3bc4ace3d81daf8957fbe6d61eaf982a3"
+  },
+  {
+    "path": "lua/entities/frog_tree/init.lua",
+    "size": 1662,
+    "crc": 1131506060,
+    "sha256": "b31b3e00dcb5784d3b94813bdeedf26c78dab4c4283d541b4e71d5d374e80c78"
+  },
+  {
+    "path": "lua/entities/frog_tree/shared.lua",
+    "size": 115,
+    "crc": 2398888673,
+    "sha256": "6175dba429de06f84f7ffa40259badc86c2a7d480d4d2e9d515f887a22cadbac"
+  },
+  {
+    "path": "materials/frog_hello.png",
+    "size": 245613,
+    "crc": 1938138428,
+    "sha256": "4e80f19d50243e2f0da7e54132fff1c48178175590bb810c5035dd3125f07339"
+  },
+  {
+    "path": "materials/frog_sprint.png",
+    "size": 270336,
+    "crc": 291462106,
+    "sha256": "4e166f1d3d16ff482d540e1315cd6076cf9942ef5d8f63474bb86994f3dc8bfb"
+  },
+  {
+    "path": "materials/frog_tree.png",
+    "size": 300904,
+    "crc": 165164785,
+    "sha256": "edb8478d4fa88f729c6aaf6ccabb8a69753ec66397f08ad83fd400f428ebc8a7"
+  },
+  {
+    "path": "materials/models/blast/mrfrog/mr.vmt",
+    "size": 68,
+    "crc": 2761004661,
+    "sha256": "66aac8259c9301a0724f39de377107c3f9561fd0f1de80f1ae8c35171228cb7c"
+  },
+  {
+    "path": "materials/models/blast/mrfrog/mr.vtf",
+    "size": 1398336,
+    "crc": 863400047,
+    "sha256": "23554810256bd09f7f78688068de2b11463b254953b26c021845f587ccd727c2"
+  },
+  {
+    "path": "materials/models/blast/mrfrog/void.vmt",
+    "size": 70,
+    "crc": 809815149,
+    "sha256": "20baed7c84874bc5c426b0475c7b89c6a8949442990b8e430dc1043068beb8ce"
+  },
+  {
+    "path": "materials/models/blast/mrfrog/void.vtf",
+    "size": 1398336,
+    "crc": 4181352661,
+    "sha256": "ed805ebc5b07964ac8489bdc51e036003a66b2f2cd395adf1d766903558e9331"
+  },
+  {
+    "path": "models/blast/mrfrog.dx90.vtx",
+    "size": 776994,
+    "crc": 1222916814,
+    "sha256": "13d700ccfde8395cb4bbfe2a236743a281de57a673379c79c30f79c4fdb7793e"
+  },
+  {
+    "path": "models/blast/mrfrog.mdl",
+    "size": 169712,
+    "crc": 524955440,
+    "sha256": "d7dd4789a6ed4231f266e25e30968629d944b16a3cfdb9497d1821b4a96396cf"
+  },
+  {
+    "path": "models/blast/mrfrog.vvd",
+    "size": 2627520,
+    "crc": 3823117297,
+    "sha256": "ef8af01c415e4adeb97860c9db5003e352f7674140c8f9c6cf23a4245da1dbd8"
+  },
+  {
+    "path": "sound/frog_hello.wav",
+    "size": 101002,
+    "crc": 4207224715,
+    "sha256": "a7536ab41316d4ca1965d9d92af13915f8ff1ffc4f47827d2be55cb0570652c6"
+  },
+  {
+    "path": "sound/frog_kill2.wav",
+    "size": 1512848,
+    "crc": 4216254920,
+    "sha256": "26c9d430dfcf200ba7fddf278e75c31aaae85c967b8d9a3ef4f3948de598eaf9"
+  },
+  {
+    "path": "sound/frog_step1.wav",
+    "size": 84936,
+    "crc": 3980052730,
+    "sha256": "51e136331d6eb3d7f26331ca716a79eee36d019cc5e11f71d9027df7f072a467"
+  },
+  {
+    "path": "sound/frog_step2.wav",
+    "size": 91992,
+    "crc": 3888894256,
+    "sha256": "6b2985aa86ed24f82ae167a77ba3868ed1d81eb88e2c4393fefba56f937c7f55"
+  },
+  {
+    "path": "sound/frog_step3.wav",
+    "size": 91992,
+    "crc": 1901190282,
+    "sha256": "eaf061c1533dc466c1186c75ba3441197431a7c3e18ffb7ca1bc46089d2511d4"
+  },
+  {
+    "path": "sound/frog_step4.wav",
+    "size": 91992,
+    "crc": 3360106098,
+    "sha256": "c926657b667156071e581f683ae9c8930eafcfb6d6114701315ed1c1e5c650de"
+  },
+  {
+    "path": "sound/frog_step5.wav",
+    "size": 84936,
+    "crc": 1756942733,
+    "sha256": "24ad9addcf3f8a5ca93c710f474ad2651755328ef92a9317dda28fc2aaf3500c"
+  },
+  {
+    "path": "sound/frog_step6.wav",
+    "size": 91992,
+    "crc": 2700178186,
+    "sha256": "739b00d0b887e4800f963316f265c57b000040521e2b389368a50a69ff76ef42"
+  },
+  {
+    "path": "sound/frog_step7.wav",
+    "size": 99048,
+    "crc": 2985054137,
+    "sha256": "3dc21dbd1a4cf93a91c72eeb36c049bc42bb6361947a3d04c8ed0487bca3a89a"
+  },
+  {
+    "path": "sound/frog_tree.wav",
+    "size": 171734,
+    "crc": 1199789255,
+    "sha256": "50f5f18c2095a9b4c9b1bf9f6812428e01084a54006ecb1de8d68a2801ec15e3"
+  }
+]
