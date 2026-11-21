@@ -1,0 +1,9 @@
+{
+  "id": "3615489241",
+  "name": "mr-frog",
+  "title": "[PILL PACK] Mr Frog",
+  "author": "Blastnit",
+  "status": "pending_download",
+  "steamcmd_download_completed": false,
+  "reason": "SteamCMD bootstrap failed: execution sandbox network disabled; no original GMA installed."
+}
