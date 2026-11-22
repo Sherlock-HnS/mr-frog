@@ -12,6 +12,8 @@ pk_pills.register('pill_mr_frog', {
         {
             name = "Night Vision",
             key = KEY_F,
+            hnsKeyLabel = "F",
+            hnsIcon = "night_vision.png",
             cooldown = 1,
             mat = Material("night_vision.png", "smooth"),
             func = function(ply, pill) end -- Client Stuff
@@ -19,6 +21,8 @@ pk_pills.register('pill_mr_frog', {
         {
             name = "Run",
             key = KEY_LSHIFT,
+            hnsKeyLabel = "SHIFT",
+            hnsIcon = "frog_sprint.png",
             keyText = "SHIFT",
             cooldown = 3,
             mat = Material("frog_sprint.png", "smooth"),
@@ -26,19 +30,13 @@ pk_pills.register('pill_mr_frog', {
                 local pillForm = pill:GetPillForm()
                 local pillTbl = pill.formTable
                 
-                pillTbl.moveSpeed.walk = 1000
-                pillTbl.moveSpeed.run = 1000
-
-                SlashModules.UpdateStats(ply)
+                pk_pills.setCostumeMoveSpeed(pill, 1000, 1000)
                 
                 pillTbl.anims.default.walk = "run"
                 pillTbl.anims.default.run = "run"
 
                 timer.Simple(1, function()
-                    pillTbl.moveSpeed.walk = 200
-                    pillTbl.moveSpeed.run = 200
-
-                    SlashModules.UpdateStats(ply)
+                    pk_pills.setCostumeMoveSpeed(pill, 200, 200)
                     
                     pillTbl.anims.default.walk = "walk"
                     pillTbl.anims.default.run = "walk"
@@ -48,14 +46,17 @@ pk_pills.register('pill_mr_frog', {
         {
             name = "Highlight",
             key = KEY_R,
+            hnsKeyLabel = "R",
+            hnsIcon = "frog_hello.png",
             cooldown = 40,
             mat = Material("frog_hello.png", "smooth"),
             func = function(ply, pill)
                 timer.Simple(1, function()
                     for k, v in ipairs(player.GetAll()) do
                         if IsValid(v.pk_pill_ent) then continue end
+                    if SherlockHNS and not SherlockHNS.CanTarget(v, ply) then continue end
     
-                        v:HangEffect({
+                        SlashModules.ApplyTargetEffect(v, ply, {
                             name = "Highlighted",
                             time = 10,
                             color = SlashUI.Theme.Green
@@ -70,6 +71,8 @@ pk_pills.register('pill_mr_frog', {
         {
             name = "Tree Throw",
             key = KEY_T,
+            hnsKeyLabel = "T",
+            hnsIcon = "frog_tree.png",
             cooldown = 60,
             mat = Material("frog_tree.png", "smooth"),
             func = function(ply, pill)
@@ -189,7 +192,7 @@ pk_pills.register('pill_mr_frog', {
                 table.insert(timings, 4.5 + .03*(i - 1))
             end
 
-            SlashModules.JumpscareV2(ply, {
+            return SlashModules.JumpscareV2(ply, {
                 time = 7.25,
                 bloodImpacts = timings,
             })
@@ -205,7 +208,15 @@ pk_pills.register('pill_mr_frog', {
     flashlight = function(ply, ent)
     end,
     jump = function(ply, ent) end,
-})
+}, function(form)
+    -- The legacy damage branches are for Sandbox and NPCs.
+    form.hnsKillAPI = true
+    form.hnsAbilities = {
+        { id = "attack", name = "Ataque", key = IN_ATTACK, OnUse = form.attack.func },
+    }
+    form.attack, form.attack2, form.reload = nil, nil, nil
+    SlashModules.ConfigureHNSAbilities(form)
+end)
 
 hook.Add("PlayerStepSoundTime", "MrFrog", function(ply, foottype, walking)
     local ent = ply.pk_pill_ent

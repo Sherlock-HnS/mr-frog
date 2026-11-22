@@ -18,7 +18,12 @@ function ENT:ExplodePlayer(ply)
     if !IsValid(ply) or !ply:IsPlayer() or !ply:Alive() then return end
     if IsValid(ply.pk_pill_ent) then return end
 
-    ply:TakeDamage(500, self:GetOwner())
+    if SherlockHNS then
+        local owner = self:GetOwner()
+        if not IsValid(owner) or not SherlockHNS.Kill(ply, owner, { reason = "projectile", inflictor = self }) then return end
+    else
+        ply:TakeDamage(500, self:GetOwner())
+    end
     self:EmitSound("physics/wood/wood_plank_break3.wav", 125, 75)
 end
 
