@@ -2,11 +2,68 @@ if SERVER then
     AddCSLuaFile()
 end
 
+-- Montada uma vez; o JumpscareV2 só copia a tabela, nunca altera.
+local ATTACK_TIMINGS = { 1.25, 1.75, 2.25, 2.75, 3.25, 3.5, 3.75, 4, 7, 7.25 }
+for i = 1, 50 do ATTACK_TIMINGS[#ATTACK_TIMINGS + 1] = 3.5 + .03 * (i - 1) end
+for i = 1, 75 do ATTACK_TIMINGS[#ATTACK_TIMINGS + 1] = 4.5 + .03 * (i - 1) end
+
+local function Alive(ply, pill)
+    return IsValid(ply) and ply:Alive() and IsValid(pill)
+end
+
+local function ThrowTree(ply, pill)
+    local puppet = pill:GetPuppet()
+    if not IsValid(puppet) then return false end
+
+    local bone = puppet:LookupBone("Lowerarm.R")
+    if not bone then return false end
+
+    local pos = puppet:GetBonePosition(bone)
+
+    local ang = ply:EyeAngles()
+    ang.p = 0
+    ang:RotateAroundAxis(ang:Right(), -150)
+
+    -- árvore só visual, na mão do sapo
+    local handTree = ents.Create("prop_dynamic")
+    if IsValid(handTree) then
+        handTree:SetModel("models/props_foliage/tree_pine06.mdl")
+        handTree:SetPos(pos - ang:Up() * 100)
+        handTree:SetAngles(ang)
+        handTree:SetParent(puppet)
+        handTree:SetSolid(SOLID_NONE)
+        handTree:FollowBone(puppet, bone)
+        handTree:Spawn()
+    end
+
+    timer.Simple(.5, function()
+        SafeRemoveEntity(handTree)
+        if not Alive(ply, pill) then return end
+
+        local tAng = ply:EyeAngles()
+        tAng.p = 0
+        tAng:RotateAroundAxis(tAng:Forward(), -90)
+        tAng:RotateAroundAxis(tAng:Right(), -90)
+
+        local tree = ents.Create("frog_tree")
+        tree:SetOwner(ply)
+        tree:SetPos(ply:EyePos() + Vector(0, 0, 20))
+        tree:SetAngles(tAng)
+        tree.moveDir = ply:GetForward()
+        tree:Spawn()
+
+        SafeRemoveEntityDelayed(tree, 5)
+    end)
+
+    pill:PillSound("treethrow")
+    pill:PillAnim("treethrow", true)
+    return true
+end
+
 pk_pills.packStart("Mr Frog", "AnalogHorrorPills_blastnit_mr_frog", "pills/pill_blast_sider.png")
 pk_pills.register('pill_mr_frog', {
-    printName = 'Mr Frog',  
+    printName = 'Mr Frog',
     model = "models/blast/mrfrog.mdl",
-    modelScale = '1',
 
     abilities = {
         {
@@ -27,19 +84,14 @@ pk_pills.register('pill_mr_frog', {
             cooldown = 3,
             mat = Material("frog_sprint.png", "smooth"),
             func = function(ply, pill)
-                local pillForm = pill:GetPillForm()
-                local pillTbl = pill.formTable
-                
+                -- animSet "sprint" (veja anims): não mexe na formTable compartilhada
+                pill.forceAnimSet = "sprint"
                 pk_pills.setCostumeMoveSpeed(pill, 1000, 1000)
-                
-                pillTbl.anims.default.walk = "run"
-                pillTbl.anims.default.run = "run"
 
                 timer.Simple(1, function()
-                    pk_pills.setCostumeMoveSpeed(pill, 200, 200)
-                    
-                    pillTbl.anims.default.walk = "walk"
-                    pillTbl.anims.default.run = "walk"
+                    if not IsValid(pill) then return end
+                    pill.forceAnimSet = nil
+                    pk_pills.setCostumeMoveSpeed(pill) -- volta ao original / override do admin
                 end)
             end
         },
@@ -52,10 +104,12 @@ pk_pills.register('pill_mr_frog', {
             mat = Material("frog_hello.png", "smooth"),
             func = function(ply, pill)
                 timer.Simple(1, function()
-                    for k, v in ipairs(player.GetAll()) do
-                        if IsValid(v.pk_pill_ent) then continue end
-                    if SherlockHNS and not SherlockHNS.CanTarget(v, ply) then continue end
-    
+                    if not Alive(ply, pill) then return end
+
+                    for _, v in ipairs(player.GetAll()) do
+                        if v == ply or IsValid(v.pk_pill_ent) then continue end
+                        if SherlockHNS and not SherlockHNS.CanTarget(v, ply) then continue end
+
                         SlashModules.ApplyTargetEffect(v, ply, {
                             name = "Highlighted",
                             time = 10,
@@ -63,7 +117,7 @@ pk_pills.register('pill_mr_frog', {
                         })
                     end
                 end)
-                
+
                 pill:PillSound("highlight")
                 pill:PillAnim("highlight", true)
             end
@@ -75,52 +129,7 @@ pk_pills.register('pill_mr_frog', {
             hnsIcon = "frog_tree.png",
             cooldown = 60,
             mat = Material("frog_tree.png", "smooth"),
-            func = function(ply, pill)
-                local puppet = pill:GetPuppet()
-                local bone = puppet:LookupBone("Lowerarm.R")
-
-                local pos = puppet:GetBonePosition(bone)
-
-                local ang = ply:EyeAngles()
-                ang.p = 0
-                ang:RotateAroundAxis(ang:Right(), -150)
-
-                local tree = ents.Create("prop_physics")
-                tree:SetModel("models/props_foliage/tree_pine06.mdl")
-                tree:SetPos(pos - ang:Up()*100)
-                tree:SetAngles(ang)
-                tree:SetParent(puppet)
-                tree:SetSolid(SOLID_NONE)
-                tree:FollowBone(puppet, bone)
-                tree:SetOwner(ply)
-                tree:Spawn()
-
-                SafeRemoveEntityDelayed(tree, 1)
-
-                timer.Simple(.5, function()
-                    SafeRemoveEntity(tree)
-
-                    local pos = puppet:GetBonePosition(bone)
-                    local dir = ply:GetForward()
-
-                    local ang = ply:EyeAngles()
-                    ang.p = 0
-                    ang:RotateAroundAxis(ang:Forward(), -90)
-                    ang:RotateAroundAxis(ang:Right(), -90)
-
-                    local tree = ents.Create("frog_tree")
-                    tree:SetOwner(ply)
-                    tree:SetPos(ply:EyePos() + Vector(0, 0, 20))
-                    tree:SetAngles(ang)
-                    tree.moveDir = dir
-                    tree:Spawn()
-
-                    SafeRemoveEntityDelayed(tree, 5)
-                end)
-                
-                pill:PillSound("treethrow")
-                pill:PillAnim("treethrow", true)
-            end
+            func = ThrowTree,
         },
     },
 
@@ -138,6 +147,10 @@ pk_pills.register('pill_mr_frog', {
             crouch = "cidle",
             crouch_walk = "cwalk",
         },
+        sprint = {
+            walk = "run",
+            run = "run",
+        },
     },
     moveSpeed = {
         walk = 200,
@@ -145,7 +158,7 @@ pk_pills.register('pill_mr_frog', {
         ducked = 150,
     },
     sounds = {
-		step = {"frog_step1.wav", "frog_step2.wav", "frog_step3.wav", "frog_step4.wav", "frog_step5.wav", "frog_step6.wav", "frog_step7.wav"},
+        step = { "frog_step1.wav", "frog_step2.wav", "frog_step3.wav", "frog_step4.wav", "frog_step5.wav", "frog_step6.wav", "frog_step7.wav" },
         highlight = "frog_hello.wav",
         treethrow = "frog_tree.wav",
         jumpscare = "frog_kill2.wav",
@@ -159,72 +172,37 @@ pk_pills.register('pill_mr_frog', {
     health = 2000,
     movePoseMode = "xy",
     aim = {
-        xPose ="aim_yaw",
+        xPose = "aim_yaw",
         yPose = "aim_pitch",
         nocrosshair = true
-    },   
-    canAim = function(ply,ent) return ent.active end,    
+    },
     attack = {
         mode = 'trigger',
         func = function(ply, ent)
-            if ent:GetCollisionGroup() == COLLISION_GROUP_IN_VEHICLE then return end
+            if ent:GetCollisionGroup() == COLLISION_GROUP_IN_VEHICLE then return false end
 
-            local timings = {
-                1.25,
-                1.75,
-                2.25,
-                2.75,
-
-                3.25,
-                3.5,
-                3.75,
-                4,
-
-                7,
-                7.25,
-            }
-
-            for i = 1, 50 do
-                table.insert(timings, 3.5 + .03*(i - 1))
-            end
-
-            for i = 1, 75 do
-                table.insert(timings, 4.5 + .03*(i - 1))
-            end
-
-            return SlashModules.JumpscareV2(ply, {
+            local result = SlashModules.JumpscareV2(ply, {
                 time = 7.25,
-                bloodImpacts = timings,
+                bloodImpacts = ATTACK_TIMINGS,
             })
+
+            -- No HNS, sem alvo / kill recusada = não gasta cooldown
+            if SherlockHNS then return result == true end
         end
     },
-    attack2 = {
-        mode = "trigger",
-        func = function(ply, ent)
-        end,
-    },
-    reload = function(ply,ent)
-    end,
-    flashlight = function(ply, ent)
-    end,
-    jump = function(ply, ent) end,
 }, function(form)
     -- The legacy damage branches are for Sandbox and NPCs.
     form.hnsKillAPI = true
     form.hnsAbilities = {
         { id = "attack", name = "Ataque", key = IN_ATTACK, OnUse = form.attack.func },
     }
-    form.attack, form.attack2, form.reload = nil, nil, nil
+    form.attack = nil
     SlashModules.ConfigureHNSAbilities(form)
 end)
 
-hook.Add("PlayerStepSoundTime", "MrFrog", function(ply, foottype, walking)
+hook.Add("PlayerStepSoundTime", "MrFrog_StepSoundTime", function(ply, foottype, walking)
     local ent = ply.pk_pill_ent
-
-    if !IsValid(ent) then return end
-    local pillForm = ent:GetPillForm()
-    
-    if pillForm != "pill_mr_frog" then return end
+    if not IsValid(ent) or ent:GetPillForm() ~= "pill_mr_frog" then return end
 
     return ply:IsSprinting() and 200 or 425
 end)
